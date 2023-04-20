@@ -1,8 +1,25 @@
-
+//LOCALHOST
 // Get All Data with localhost
 ###
 GET http://localhost:8080/contacts HTTP/1.1
 
 // Get Single Data with localhost
-### Change the _id parameter
+### 
+GET http://localhost:8080/contacts/643ee4f5c2945ed3d476146f HTTP/1.1
+###
+GET http://localhost:8080/contacts/643ee5ebc2945ed3d4761470 HTTP/1.1
+###
 GET http://localhost:8080/contacts/643ee6afc2945ed3d4761471 HTTP/1.1
+
+//PRODUCTION 
+// Get all Data with deploy production
+###
+GET https://personal-assignmentw01.onrender.com/contacts
+
+/// Get Single data with deploy production
+###
+GET https://personal-assignmentw01.onrender.com/contacts/643ee4f5c2945ed3d476146f
+###
+GET https://personal-assignmentw01.onrender.com/contacts/643ee5ebc2945ed3d4761470
+###
+GET https://personal-assignmentw01.onrender.com/contacts/643ee6afc2945ed3d4761471
