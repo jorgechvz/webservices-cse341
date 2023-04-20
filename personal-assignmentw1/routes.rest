@@ -1,8 +1,8 @@
 
 // Get All Data with localhost
 ###
-GET http://localhost:8080 HTTP/1.1
+GET http://localhost:8080/contacts HTTP/1.1
 
 // Get Single Data with localhost
 ### Change the _id parameter
-GET http://localhost:8080/643ee6afc2945ed3d4761471 HTTP/1.1
+GET http://localhost:8080/contacts/643ee6afc2945ed3d4761471 HTTP/1.1
