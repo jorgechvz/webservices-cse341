@@ -1,7 +1,8 @@
-const routes =require('express').Router();
+const express =require('express');
+const controllerServer = require('../controllers/controllerServer')
 
-routes.get('/',(req, res, next) => {
-    res.send("Jorge A. Chavez")
-})
+const router = express.Router();
 
-module.exports = routes;
+router.get('/', controllerServer.getData);
+
+module.exports = router;
