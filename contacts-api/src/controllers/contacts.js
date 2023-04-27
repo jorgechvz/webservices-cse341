@@ -47,7 +47,6 @@ const createData = async (req, res, next) => {
     favoriteColor: req.body.favoriteColor,
     birthday: req.body.birthday
   };
-  console.log(newContact);
   const result = await mongodb.getDB().db('User').collection('contacts').insertOne(newContact);
   if (result.acknowledged) {
     const createdContact = {
