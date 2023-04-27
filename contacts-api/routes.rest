@@ -9,7 +9,7 @@ GET http://localhost:8080/contacts/643ee4f5c2945ed3d476146f HTTP/1.1
 ###
 GET http://localhost:8080/contacts/643ee5ebc2945ed3d4761470 HTTP/1.1
 ###
-GET http://localhost:8080/contacts/643ee6afc2945ed3d4761471 HTTP/1.1
+GET http://localhost:8080/contacts/6449e48b331772b7c8c1e94e HTTP/1.1
 
 // Create a new Contact
 ###
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 // Update contact by ID
 ###
-PUT http://localhost:8080/contacts/6448062f827e0969970c1271 HTTP/1.1
+PUT http://localhost:8080/contacts/6449e48b331772b7c8c1e94e HTTP/1.1
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 
 // Delete a contact
 ###
-DELETE http://localhost:8080/contacts/64480c3cbd0b0121bcf16e76 HTTP/1.1
+DELETE http://localhost:8080/contacts/6449e48b331772b7c8c1e94e HTTP/1.1
 
 
 
@@ -54,7 +54,7 @@ GET https://personal-assignmentw01.onrender.com/contacts/643ee4f5c2945ed3d476146
 ###
 GET https://personal-assignmentw01.onrender.com/contacts/643ee5ebc2945ed3d4761470 HTTP/1.1
 ###
-GET https://personal-assignmentw01.onrender.com/contacts/643ee6afc2945ed3d4761471 HTTP/1.1
+GET https://personal-assignmentw01.onrender.com/contacts/6449e57c8231104cc9b98121 HTTP/1.1
 
 // Create a new Contact with Render Link
 ###
@@ -62,26 +62,26 @@ POST https://personal-assignmentw01.onrender.com/contacts HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "Emilia",
-    "lastName": "Suarez",
-    "email": "emiliasuarez@test.com",
-    "favoriteColor": "Red",
-    "birthday": "12/30/1998"
+    "firstName": "Alex",
+    "lastName": "McKay",
+    "email": "alexmckay@test.com",
+    "favoriteColor": "Yellow",
+    "birthday": "10/25/1997"
 }
 
 // Update contact by ID with Render Link
 ###
-PUT https://personal-assignmentw01.onrender.com/contacts/6449d4d4f153566d5906c36d HTTP/1.1
+PUT https://personal-assignmentw01.onrender.com/contacts/6449e57c8231104cc9b98121 HTTP/1.1
 Content-Type: application/json
 
 {
     "firstName": "Kevin",
     "lastName": "Mckay",
-    "email": "alexmckay@test.com",
+    "email": "kevinmckay@test.com",
     "favoriteColor": "Sky Blue",
     "birthday": "08/30/1997"
 }
 
 // Delete a contact with Render Link
 ###
-DELETE https://personal-assignmentw01.onrender.com/contacts/6449d4d4f153566d5906c36d HTTP/1.1
+DELETE https://personal-assignmentw01.onrender.com/contacts/6449e57c8231104cc9b98121 HTTP/1.1
