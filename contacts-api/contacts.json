@@ -1,26 +1,26 @@
 [
-    {
-      "_id": "643ee4f5c2945ed3d476146f",
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "johndoe@test.com",
-      "favoriteColor": "Blue",
-      "birthday": "01/01/1990"
-    },
-    {
-      "_id": "643ee5ebc2945ed3d4761470",
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "email": "janedoe@test.com",
-      "favoriteColor": "Pink",
-      "birthday": "05/10/1995"
-    },
-    {
-      "_id": "643ee6afc2945ed3d4761471",
-      "firstName": "Mike",
-      "lastName": "Smith",
-      "email": "mikesmith@test.com",
-      "favoriteColor": "Red",
-      "birthday": "09/15/1985"
-    }
-  ]
+  {
+    "_id": "643ee4f5c2945ed3d476146f",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "johndoe@test.com",
+    "favoriteColor": "Blue",
+    "birthday": "01/01/1990"
+  },
+  {
+    "_id": "643ee5ebc2945ed3d4761470",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "janedoe@test.com",
+    "favoriteColor": "Pink",
+    "birthday": "05/10/1995"
+  },
+  {
+    "_id": "643ee6afc2945ed3d4761471",
+    "firstName": "Mike",
+    "lastName": "Smith",
+    "email": "mikesmith@test.com",
+    "favoriteColor": "Red",
+    "birthday": "09/15/1985"
+  }
+]
