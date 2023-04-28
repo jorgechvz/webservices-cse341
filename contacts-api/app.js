@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const mongodb = require('./src/database/connect');
-const contactsRoutes = require('./src/routes/index');
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -19,7 +18,7 @@ app
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
   })
-  .use('/', contactsRoutes)
+  .use('/', require('./src/routes'))
   .use((req, res) => {
     res.status(400).send('Sorry cant find that');
   })
