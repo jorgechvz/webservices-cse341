@@ -8,6 +8,7 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 app
+  .use('/', contactsRoutes)
   .use(bodyParser.json())
   .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,7 +20,6 @@ app
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
   })
-  .use('/', contactsRoutes)
   .use((req, res) => {
     res.status(400).send('Sorry cant find that');
   })
