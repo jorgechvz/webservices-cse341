@@ -1,0 +1,128 @@
+// LOCALHOST
+// ROUTES FOR PRODUCTS 
+// Get All Products
+GET http://localhost:8080/products 
+// Get Single Product by Id
+### 
+GET http://localhost:8080/products/6451cf0284f0c6e408f1c29e
+// Create a new Product
+###
+POST http://localhost:8080/products HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Product 5",
+  "description": "Description of product 5",
+  "price": 56.22,
+  "image_url": "https://example.com/product5.jpg",
+  "category": "Electronic",
+  "quantity": 500
+}
+// Update a Product
+###
+PUT http://localhost:8080/products/6451d0ede9960a77e9f8ea3a HTTP/1.1
+Content-Type: application/json
+
+{
+  "image_url": "https://example.com/product2.jpg"
+}
+// Delete Product
+###
+DELETE  http://localhost:8080/products/6451dab1d260f04eca52368e HTTP/1.1
+
+
+// ROUTES FOR USERS
+// Get All users
+### 
+GET http://localhost:8080/users HTTP/1.1
+// Get a Single user by Id
+###
+GET http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+// Create a new User 
+###
+POST http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Jorge Chavez",
+  "email": "jorgechvzpon@gmail.com",
+  "password": "jorgechvz",
+  "phone": "+51 941449749"
+}
+// Update a User 
+###
+PUT http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone": "51 941449780"
+}
+// Delete a User
+###
+DELETE http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+
+// ------------------------------------------------------------------------------ //
+
+// RENDER PRODUCTION
+// ROUTES WITH RENDER URL FOR PRODUCTS
+// Get All Products
+###
+GET http://localhost:8080/products 
+// Get Single Product by Id
+### 
+GET http://localhost:8080/products/6451cf0284f0c6e408f1c29e
+// Create a new Product
+###
+POST http://localhost:8080/products HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Product 5",
+  "description": "Description of product 5",
+  "price": 56.22,
+  "image_url": "https://example.com/product5.jpg",
+  "category": "Electronic",
+  "quantity": 500
+}
+// Update a Product
+###
+PUT http://localhost:8080/products/6451d0ede9960a77e9f8ea3a HTTP/1.1
+Content-Type: application/json
+
+{
+  "image_url": "https://example.com/product2.jpg"
+}
+// Delete Product
+###
+DELETE  http://localhost:8080/products/6451dab1d260f04eca52368e HTTP/1.1
+
+
+// ROUTES WITH RENDER URL FOR USERS
+// Get All users
+### 
+GET http://localhost:8080/users HTTP/1.1
+// Get a Single user by Id
+###
+GET http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+// Create a new User 
+###
+POST http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Jorge Chavez",
+  "email": "jorgechvzpon@gmail.com",
+  "password": "jorgechvz",
+  "phone": "+51 941449749"
+}
+// Update a User 
+###
+PUT http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone": "51 941449780"
+}
+// Delete a User
+###
+DELETE http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
