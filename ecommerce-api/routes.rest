@@ -11,24 +11,24 @@ POST http://localhost:8080/products HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Product 5",
-  "description": "Description of product 5",
-  "price": 56.22,
-  "image_url": "https://example.com/product5.jpg",
+  "name": "Product 7",
+  "description": "Description of product 7",
+  "price": 42.22,
+  "image_url": "https://example.com/product7.jpg",
   "category": "Electronic",
-  "quantity": 500
+  "quantity": 100
 }
 // Update a Product
 ###
-PUT http://localhost:8080/products/6451d0ede9960a77e9f8ea3a HTTP/1.1
+PUT http://localhost:8080/products/6451cf0284f0c6e408f1c29e HTTP/1.1
 Content-Type: application/json
 
 {
-  "image_url": "https://example.com/product2.jpg"
+  "image_url": "https://example.com/product1.jpg"
 }
 // Delete Product
 ###
-DELETE  http://localhost:8080/products/6451dab1d260f04eca52368e HTTP/1.1
+DELETE  http://localhost:8080/products/64572f05e29b0b72db657e23 HTTP/1.1
 
 
 // ROUTES FOR USERS
@@ -37,24 +37,24 @@ DELETE  http://localhost:8080/products/6451dab1d260f04eca52368e HTTP/1.1
 GET http://localhost:8080/users HTTP/1.1
 // Get a Single user by Id
 ###
-GET http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+GET http://localhost:8080/users/6452f91c9e6779b8bb0500eb HTTP/1.1
 // Create a new User 
 ###
 POST http://localhost:8080/users HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Jorge Chavez",
-  "email": "jorgechvzpon@gmail.com",
-  "password": "jorgechvz",
-  "phone": "+51 941449749"
+  "name": "Jorge",
+  "email": "jorgepon@gmail.com",
+  "password": "jorgechvz"
 }
 // Update a User 
 ###
-PUT http://localhost:8080/users/6452eae463117f9d482be4aa HTTP/1.1
+PUT http://localhost:8080/users/64572993fb99a4e63500f9c5 HTTP/1.1
 Content-Type: application/json
 
 {
+    "password": "jorgechvz",
     "phone": "51 941449780"
 }
 // Delete a User

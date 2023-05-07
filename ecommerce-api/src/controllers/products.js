@@ -2,41 +2,74 @@ const db = require('../models');
 const { ObjectId } = require('mongodb');
 const Products = db.Products;
 
+const { createProductValidation, updateProductValidation } = require('../utils/productsValidation');
+
 const getAllProducts = async (req, res) => {
-  await Products.find({})
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+  try {
+    await Products.find({})
+      .then((data) => {
+        if (!data) res.status(404).send({ message: `Not Products Found` });
+        else res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: `Error with find users`,
+          error: err
+        });
+      });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };
 
 const getSingleProduct = async (req, res) => {
-  const productId = new ObjectId(req.params.id);
-  await Products.find({ _id: productId })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+  try {
+    const productId = new ObjectId(req.params.id);
+    await Products.find({ _id: productId })
+      .then((data) => {
+        if (!data) res.status(404).send({ message: `Not Product Found with id:${userId}` });
+        else res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: `Error with find product with id:${userId}`,
+          error: err
+        });
+      });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };
 
 const createProduct = async (req, res) => {
-  const products = new Products(req.body);
-  await products
-    .save()
-    .then((data) => {
-      res.status(201).send(data);
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+  try {
+    const { error, value } = createProductValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const products = new Products(req.body);
+    await products
+      .save()
+      .then((data) => {
+        res.status(201).send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || 'Some error occurred while creating the product.'
+        });
+      });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };
 
 const updateProduct = async (req, res) => {
   const productId = new ObjectId(req.params.id);
+  const userId = new ObjectId(req.params.id);
+    const { error, value } = updateProductValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
   const updateProduct = {
     name: req.body.name,
     description: req.body.description,
@@ -51,10 +84,12 @@ const updateProduct = async (req, res) => {
       if (!data) {
         throw new Error('Product not found!');
       }
-      res.status(201).send(data);
+      res.status(204).send();
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).send({
+        message: err.message || 'Some error occurred while updating the product.'
+      });
     });
 };
 
@@ -62,7 +97,7 @@ const deleteProduct = async (req, res) => {
   const productId = new ObjectId(req.params.id);
   await Products.deleteOne({ _id: productId })
     .then((data) => {
-      res.status(201).send('Product deleted successfully');
+      res.status(200).send('Product deleted successfully');
     })
     .catch((err) => {
       res.status(500).send(err);
