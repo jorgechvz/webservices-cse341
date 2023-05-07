@@ -65,7 +65,6 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const productId = new ObjectId(req.params.id);
-  const userId = new ObjectId(req.params.id);
     const { error, value } = updateProductValidation.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
