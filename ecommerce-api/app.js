@@ -9,6 +9,7 @@ const session = require('express-session');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./src/models/users');
 const cors = require('cors');
+const findOrCreate = require('mongoose-findorcreate');
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -53,10 +54,10 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL,
       userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
     },
-    function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        return cb(err, user);
-      });
+    function(accessToken, refreshToken, profile, done) {
+      //User.findOrCreate({ githubId: profile.id }, function (err, user) {
+        return done(null, profile);
+      //});
     }
   )
 );
@@ -64,22 +65,10 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then(user => {
-      done(null, user);
-    })
-    .catch(err => {
-      done(err, null);
-    });
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
-
-app.get('/', (req, res) => {
-  res.send(
-    req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : 'Logged Out'
-  );
-});
 mongodb.initDB((err, mongodb) => {
   if (err) {
     console.log(err);
