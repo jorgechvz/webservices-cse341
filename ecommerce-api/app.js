@@ -1,12 +1,14 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const mongodb = require('./src/config/db.config');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-const session = require('express-session');
 const passport = require('passport');
+const session = require('express-session');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('./src/models/users')
+const User = require('./src/models/users');
+const cors = require('cors');
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -14,6 +16,15 @@ const app = express();
 app
   .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use(bodyParser.json())
+  .use(
+    session({
+      secret: 'Our little secret.',
+      resave: false,
+      saveUninitialized: false
+    })
+  )
+  .use(passport.initialize())
+  .use(passport.session())
   .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -24,7 +35,9 @@ app
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
   })
-  .use('/', require('./src/routes'))
+  .use(cors({ methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'] }))
+  .use(cors({ origin: '*' }))
+  .use('/', require('./src/routes/index'))
   .use((req, res) => {
     res.status(400).send('Sorry cant find that');
   })
@@ -32,36 +45,41 @@ app
     console.error(err.stack);
     res.status(500).send('Something broke!');
   });
-
-app.use(
-  session({
-    secret: 'Our little secret.',
-    resave: false,
-    saveUninitialized: false
-  })
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: process.env.CALLBACK_URL,
+      userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  )
 );
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 passport.serializeUser((user, done) => {
-  done(null, user.id)
-})
+  done(null, user.id);
+});
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  })
-})
-
-passport.use(new GoogleStrategy({
-  clientID: "",
-  clientSecret: "",
-  callbackURL: "",
-  userProfileURL: ""
-}))
+  User.findById(id)
+    .then(user => {
+      done(null, user);
+    })
+    .catch(err => {
+      done(err, null);
+    });
+});
 
 
+app.get('/', (req, res) => {
+  res.send(
+    req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : 'Logged Out'
+  );
+});
 mongodb.initDB((err, mongodb) => {
   if (err) {
     console.log(err);
