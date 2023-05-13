@@ -1,8 +1,11 @@
 const express = require('express');
+const passport = require('passport');
+const productRouter = require('./products');
+const { required } = require('joi');
 const router = express.Router();
-
+const authRouter = require('./auth');
 router.use('/', require('./swagger'));
-router.use('/products', require('./products'));
+router.use('/products', productRouter);
 router.use('/users', require('./users'));
-
+router.use('/', authRouter);
 module.exports = router;
