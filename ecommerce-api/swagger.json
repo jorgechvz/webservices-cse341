@@ -5,10 +5,10 @@
       "description": "Ecommerce API",
       "version": "1.0.0"
     },
-    "host": "localhost:8080",
+    "host": "ecommerce-api-8x8h.onrender.com",
     "basePath": "/",
     "schemes": [
-      "http"
+      "https"
     ],
     "tags": [
       {
