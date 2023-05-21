@@ -5,8 +5,6 @@ import productsTypesDefs from './src/controllers/productsTypesDefs';
 import userResolver from './src/controllers/userResolvers';
 import userTypesDefs from './src/controllers/userTypesDefs';
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import fetch from 'node-fetch';
 
 const port: number = parseInt(process.env.PORT as string, 10) || 8080;
 const app: Application = express();
@@ -37,20 +35,5 @@ async function start() {
   });
   app.listen(port);
   console.log(`Connect to database and server is running in ${port} port!`);
-  const query = gql`
-    query {
-      __typename
-    }
-  `;
-  const response = await fetch('https://ecommerce-api-gql.onrender.com/api', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query })
-  });
-  if (response.ok) {
-    const result = await response.json();
-  } else {
-    console.error('Error:', response.statusText);
-  }
 }
 start();
