@@ -36,18 +36,21 @@ async function start() {
   });
   app.listen(port);
   console.log(`Connect to database and server is running in ${port} port!`);
-  const client = new ApolloClient({
-    uri: 'https://ecommerce-api-gql.onrender.com/api',
-    cache: new InMemoryCache()
-  });
   const query = gql`
     query {
       __typename
     }
   `;
-  client
-    .query({ query })
-    .then(result => console.log(result.data))
-    .catch(error => console.error(error));
+  const response = await fetch('https://ecommerce-api-gql.onrender.com/api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query })
+  });
+  if (response.ok) {
+    const result = await response.json();
+    console.log(result.data);
+  } else {
+    console.error('Error:', response.statusText);
+  }
 }
 start();
