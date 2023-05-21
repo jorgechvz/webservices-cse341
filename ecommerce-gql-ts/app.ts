@@ -6,6 +6,7 @@ import userResolver from './src/controllers/userResolvers';
 import userTypesDefs from './src/controllers/userTypesDefs';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import fetch from 'node-fetch';
 
 const port: number = parseInt(process.env.PORT as string, 10) || 8080;
 const app: Application = express();
@@ -48,7 +49,6 @@ async function start() {
   });
   if (response.ok) {
     const result = await response.json();
-    console.log(result.data);
   } else {
     console.error('Error:', response.statusText);
   }
