@@ -1,5 +1,8 @@
-import Products, { IProduct } from '../models/products';
+
 import { ObjectId } from 'mongodb';
+import { IProduct } from '../models/products';
+import { Products } from '../models';
+
 
 const productsResolver = {
   Query: {
@@ -25,27 +28,21 @@ const productsResolver = {
     createProduct: async (
       parent: any,
       args: {
-        name: string;
-        description: string;
-        price: number;
-        image_url: string;
-        category: string;
-        quantity: number;
+        input: {
+          name: string;
+          description: string;
+          price: number;
+          image_url: string;
+          category: string;
+          quantity: number;
+        }
       },
       context: any,
       info: any
     ): Promise<IProduct> => {
       try {
-        const { name, description, price, image_url, category, quantity } = args;
-        const product: IProduct = new Products({
-          name,
-          description,
-          price,
-          image_url,
-          category,
-          quantity
-        });
-        await product.save();
+        const product: IProduct = new Products({...args.input});
+        await product.save()
         return product;
       } catch (err) {
         throw err;
@@ -55,48 +52,47 @@ const productsResolver = {
       _: any,
       {
         _id,
-        name,
-        description,
-        price,
-        image_url,
-        category,
-        quantity
+        input: {
+          name,
+          description,
+          price,
+          image_url,
+          category,
+          quantity
+        }
       }: {
         _id: string;
-        name: string;
-        description: string;
-        price: number;
-        image_url: string;
-        category: string;
-        quantity: number;
+        input: {
+          name: string;
+          description: string;
+          price: number;
+          image_url: string;
+          category: string;
+          quantity: number;
+        }
       }
     ): Promise<IProduct> => {
       try {
         const productId = new ObjectId(_id);
-        const product: IProduct | null = await Products.findOne({ _id: productId });
-        if (!product) {
+        const filter = { _id: productId };
+        const update = {
+          $set: {
+            name,
+            description,
+            price,
+            image_url,
+            category,
+            quantity
+          }
+        };
+        const options = { returnOriginal: false };
+        const updatedProduct = await Products.findOneAndUpdate(filter, update, options);
+        if (!updatedProduct) {
           throw new Error('Product not found!');
         }
-        if (name) {
-          product.name = name;
-        }
-        if (description) {
-          product.description = description;
-        }
-        if (price) {
-          product.price = price;
-        }
-        if (image_url) {
-          product.image_url = image_url;
-        }
-        if (category) {
-          product.category = category;
-        }
-        if (quantity) {
-          product.quantity = quantity;
-        }
-        product.save();
-        return product;
+        
+        return updatedProduct;
+        
       } catch (err) {
         throw err;
       }

@@ -29,8 +29,8 @@ const userTypesDefs = gql`
   }
 
   type Mutation {
-    createUser(user: CreateUserInput!): User!
-    updateUser(_id: ID!, user: UpdateUserInput): User!
+    createUser(input: CreateUserInput!): User!
+    updateUser(_id: ID!, input: UpdateUserInput): User!
     deleteUser(_id: ID!): String!
   }
 `;

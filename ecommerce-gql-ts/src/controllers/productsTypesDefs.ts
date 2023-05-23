@@ -35,8 +35,8 @@ const productTypesDefs = gql`
   }
 
   type Mutation {
-    createProduct(product: CreateProductInput!): Product!
-    updateProduct(_id: ID!, product: UpdateProductInput): Product!
+    createProduct(input: CreateProductInput!): Product!
+    updateProduct(_id: ID!, input: UpdateProductInput): Product!
     deleteProduct(_id: ID!): String!
   }
 `;

@@ -25,24 +25,19 @@ const userResolvers = {
     createUser: async (
       parent: any,
       args: {
-        name: string;
-        email: string;
-        password: string;
-        phone: string;
+        input: {
+          name: string;
+          email: string;
+          password: string;
+          phone: string;
+        };
       },
       context: any,
       info: any
     ): Promise<IUser> => {
       try {
-        const { name, email, password, phone } = args;
-        const user: IUser = new User({
-          name,
-          email,
-          password,
-          phone
-        });
+        const user: IUser = new User({ ...args.input });
         const savedUser: IUser = await user.save();
-        console.log(savedUser);
         return savedUser;
       } catch (err) {
         throw err;
@@ -52,32 +47,34 @@ const userResolvers = {
       _: any,
       {
         _id,
-        name,
-        email,
-        password,
-        phone
-      }: { _id: string; name?: string; email?: string; password?: string; phone?: string }
+        input: { name, email, password, phone }
+      }: {
+        _id: string;
+        input: {
+          name?: string;
+          email?: string;
+          password?: string;
+          phone?: string;
+        };
+      }
     ): Promise<IUser> => {
       try {
         const userId = new ObjectId(_id);
-        const user: IUser | null = await User.findOne({ _id: userId });
-        if (!user) {
+        const filterId = { _id: userId };
+        const update = {
+          $set: {
+            name,
+            email,
+            password,
+            phone
+          }
+        };
+        const options = { returnOriginal: false };
+        const updatedUser = await User.findOneAndUpdate(filterId, update, options);
+        if (!updatedUser) {
           throw new Error('User not found!');
         }
-        if (name) {
-          user.name = name;
-        }
-        if (email) {
-          user.email = email;
-        }
-        if (password) {
-          user.password = password;
-        }
-        if (phone) {
-          user.phone = phone;
-        }
-        await user.save();
-        return user;
+        return updatedUser;
       } catch (err) {
         throw err;
       }
