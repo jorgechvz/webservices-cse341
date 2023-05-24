@@ -2,9 +2,9 @@ import { gql } from 'apollo-server-express';
 
 const appointmentsTypesDefs = gql`
   enum AppointmentStatus {
-    PENDING
-    CONFIRMED
-    CANCELED
+    pending
+    confirmed
+    canceled
   }
 
   type Appointments {

@@ -39,7 +39,7 @@ const medicalHistoriSchema = new mongoose.Schema({
 });
 
 const MedicalHistory: Model<IMedicalHistory> = mongoose.model<IMedicalHistory>(
-  'medicalHistory',
+  'medicalhistories',
   medicalHistoriSchema
 );
 
