@@ -15,8 +15,11 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/client": "^3.7.14",
+    "@types/bcrypt": "^5.0.0",
+    "@types/joi": "^17.2.3",
     "@types/react": "^18.2.6",
     "apollo-server-express": "^3.12.0",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
