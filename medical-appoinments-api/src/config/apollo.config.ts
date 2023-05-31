@@ -1,5 +1,7 @@
 /* Resolvers */
-import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import { AuthenticationError } from 'apollo-server';
+import cookieParser from 'cookie-parser';
 import { resolvers } from '../controllers/resolvers/index';
 /* TypesDefs */
 import { typeDefs } from '../controllers/typesDefs/index';
@@ -8,6 +10,9 @@ import { typeDefs } from '../controllers/typesDefs/index';
 import { ApolloServer } from 'apollo-server-express';
 /* Express */
 import type { Express } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 export interface MyContext {
   user: string;
@@ -15,25 +20,35 @@ export interface MyContext {
 }
 
 export const apolloInit = async (app: Express) => {
-  console.log("init apollo")
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }): MyContext => {
-      const token = req.headers.authorization || '';
-      console.log(token);
-      const user = req.userData?.nameUser as string;
-      const isAuthenticate = req.userData?.isAuthenticated as boolean;
-      return { user, isAuthenticate };
+    context: ({ req, res }) => {
+      const token = req.cookies.token;
+      let user;
+      let isAuthenticated = false;
+      try {
+        if (token) {
+          const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string);
+          user = decoded;
+          isAuthenticated = true;
+          return { user, isAuthenticated };
+        }
+      } catch (err) {
+        throw new AuthenticationError('User not authenticate');
+      }
     }
   });
   try {
     await apolloServer.start();
     apolloServer.applyMiddleware({
       app,
-      path: '/graphql'
+      path: '/graphql',
+      cors: {
+        origin: "https://studio.apollographql.com",
+        credentials: true
+      }
     });
-    console.log("apollo ready")
   } catch (err) {
     console.log(err);
   }

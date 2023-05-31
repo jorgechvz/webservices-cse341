@@ -12,8 +12,8 @@ enum AppointmentStatus {
 }
 const appointmentsResolver = {
   Query: {
-    getAllAppointments: async (_: any, __: any, context: MyContext): Promise<IAppointments[]> => {
-      if (!context.isAuthenticate) {
+    getAllAppointments: async (_: any, __: any, context: any): Promise<IAppointments[]> => {
+      if (!context.isAuthenticated) {
         throw new AuthenticationError('User not authenticate');
       }
       try {

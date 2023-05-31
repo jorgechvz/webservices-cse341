@@ -1,11 +1,10 @@
 import express, { Express, Request, Response } from 'express';
 import { oauthRouter } from './oauthRoutes';
-import { routerTest } from './test';
-
+import { routerMain } from './mainRoute';
 
 const router = express.Router();
 
 router.use('/', oauthRouter);
-router.use('/use', routerTest);
+router.use('/api', routerMain);
 
 export { router };
