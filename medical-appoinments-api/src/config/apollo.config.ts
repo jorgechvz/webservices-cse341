@@ -45,7 +45,7 @@ export const apolloInit = async (app: Express) => {
       app,
       path: '/graphql',
       cors: {
-        origin: "https://studio.apollographql.com",
+        origin: ['https://medical-appointments-api.onrender.com', 'https://studio.apollographql.com'],
         credentials: true
       }
     });
