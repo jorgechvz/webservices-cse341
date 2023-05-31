@@ -37,6 +37,10 @@ void apolloInit(app);
 
 app
   .use(bodyParser.json())
+  .use(cors({
+    origin: ['https://medical-appointments-api.onrender.com', 'https://studio.apollographql.com'],
+    credentials: true,
+  }))
   .use(cookieParser())
   .use(
     session({
