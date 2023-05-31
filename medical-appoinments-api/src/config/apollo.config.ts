@@ -25,6 +25,7 @@ export const apolloInit = async (app: Express) => {
     resolvers,
     context: ({ req, res }) => {
       const token = req.cookies.token;
+      console.log(token);
       let user;
       let isAuthenticated = false;
       try {
