@@ -8,15 +8,15 @@ import { passportMiddleware } from './src/config/auth.config';
 import { initDB } from './src/config/db.config';
 import { apolloInit } from './src/config/apollo.config';
 import cookieParser from 'cookie-parser';
-import cors from "cors";
+import cors from 'cors';
 
 const app: Express = express();
 const port: number = parseInt(process.env.PORT as string, 10) || 8080;
 
 interface UserSession {
-  id?: string,
-  nameUser?: string,
-  isAuthenticated: boolean
+  id?: string;
+  nameUser?: string;
+  isAuthenticated: boolean;
 }
 declare global {
   namespace Express {
@@ -52,9 +52,9 @@ app
     );
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader(
-      'Access-Control-Allow-Origin', 'https://studio.apollographql.com')
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
   })
   .use(passport.initialize())
@@ -65,7 +65,11 @@ app
   .use(
     '/',
     (req, res, next) => {
-      req.userData = {id: req.session.user?.id, nameUser: req.session.user?.displayName , isAuthenticated: !!req.session.user}; 
+      req.userData = {
+        id: req.session.user?.id,
+        nameUser: req.session.user?.displayName,
+        isAuthenticated: !!req.session.user
+      };
       next();
     },
     router
