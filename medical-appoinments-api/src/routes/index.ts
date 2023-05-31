@@ -1,9 +1,11 @@
 import express, { Express, Request, Response } from 'express';
-import oauthRoute from './oauthRoutes';
-import mainRoute from './mainRoute';
+import { oauthRouter } from './oauthRoutes';
+import { routerTest } from './test';
+
+
 const router = express.Router();
 
-router.use('/', oauthRoute);
-router.use('/',mainRoute);
+router.use('/', oauthRouter);
+router.use('/use', routerTest);
 
-export {router};
+export { router };

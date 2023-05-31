@@ -4,7 +4,7 @@ dotenv.config();
 
 let _db: typeof mongoose;
 
-const initDB = (callback: (error: Error | null, db?: typeof mongoose) => void) => {
+export const initDB = (callback: (error: Error | null, db?: typeof mongoose) => void) => {
   if (_db) {
     return callback(null, _db);
   }
@@ -30,7 +30,3 @@ const getDB = () => {
   return _db;
 };
 
-export default {
-  initDB,
-  getDB,
-};

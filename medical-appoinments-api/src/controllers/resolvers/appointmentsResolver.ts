@@ -1,5 +1,10 @@
+
 import Appointments, { IAppointments } from '../../models/appointmentsModel';
+import { AuthenticationError } from 'apollo-server';
+import {Profile} from 'passport';
 import { ObjectId } from 'mongodb';
+import { MyContext } from '../../config/apollo.config';
+
 enum AppointmentStatus {
   Pending = 'pending',
   Confirmed = 'confirmed',
@@ -7,7 +12,10 @@ enum AppointmentStatus {
 }
 const appointmentsResolver = {
   Query: {
-    getAllAppointments: async (): Promise<IAppointments[]> => {
+    getAllAppointments: async (_: any, __: any, context: MyContext): Promise<IAppointments[]> => {
+      if (!context.isAuthenticate) {
+        throw new AuthenticationError('User not authenticate');
+      }
       try {
         const appointments: IAppointments[] = await Appointments.find();
         return appointments;
