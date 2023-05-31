@@ -52,8 +52,7 @@ app
     );
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'https://medical-appointments-api.onrender.com');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
   })
