@@ -39,7 +39,6 @@ app
   .use(bodyParser.json())
   .use(cors({
     origin: ['https://medical-appointments-api.onrender.com', 'https://studio.apollographql.com'],
-    allowedHeaders: ["Content-Type"],
     credentials: true,
   }))
   .options('*', cors())
@@ -60,6 +59,7 @@ app
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.cookie("token",req.cookies.token)
     next();
   })
   .use(passport.initialize())
