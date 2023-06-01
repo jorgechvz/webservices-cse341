@@ -1,11 +1,15 @@
 import Doctor, { IDoctor } from '../../models/doctorModel';
 import { ObjectId } from 'mongodb';
+import { AuthenticationError } from 'apollo-server';
 
 const doctorResolver = {
   Query: {
     getAllDoctors: async (): Promise<IDoctor[]> => {
       try {
         const doctor: IDoctor[] = await Doctor.find();
+        if (!doctor) {
+          throw new Error('Doctors not found');
+        }
         return doctor;
       } catch (err) {
         throw err;
@@ -15,6 +19,9 @@ const doctorResolver = {
       try {
         const doctorId = new ObjectId(_id);
         const findDoctor: IDoctor[] | null = await Doctor.find({ _id: doctorId });
+        if (findDoctor.length === 0) {
+          throw new Error('Doctor not found');
+        }
         return findDoctor;
       } catch (err) {
         throw err;
@@ -25,8 +32,12 @@ const doctorResolver = {
       { doctorSpecialty }: { doctorSpecialty: string }
     ): Promise<IDoctor[]> => {
       try {
-        const findDoctor: IDoctor[] | null = await Doctor.find({ 
-          doctorSpecialty: doctorSpecialty });
+        const findDoctor: IDoctor[] | null = await Doctor.find({
+          doctorSpecialty: doctorSpecialty
+        });
+        if (findDoctor.length === 0) {
+          throw new Error('Specialty Doctor not found');
+        }
         return findDoctor;
       } catch (err) {
         throw err;
@@ -40,6 +51,9 @@ const doctorResolver = {
         const findDoctor: IDoctor[] | null = await Doctor.find({
           doctorHoursAvailability: doctorAvailability
         });
+        if (findDoctor.length === 0) {
+          throw new Error('Doctor not found');
+        }
         return findDoctor;
       } catch (err) {
         throw err;
@@ -64,6 +78,9 @@ const doctorResolver = {
       context: any,
       info: any
     ): Promise<IDoctor> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
         const newDoctor: IDoctor = new Doctor({ ...args.doctors });
         await newDoctor.save();
@@ -74,22 +91,10 @@ const doctorResolver = {
     },
     updateDoctor: async (
       _: any,
-      {
-        _id,
-        doctors: {
-          doctorName,
-          doctorSpecialty,
-          doctorOfficeAddress,
-          doctorCity,
-          doctorState,
-          doctorCountry,
-          doctorPhone,
-          doctorHoursAvailability
-        }
-      }: {
+      args: {
         _id: string;
         doctors: {
-          doctorName: string,
+          doctorName: string;
           doctorSpecialty: string;
           doctorOfficeAddress: string;
           doctorCity: string;
@@ -98,23 +103,16 @@ const doctorResolver = {
           doctorPhone: string;
           doctorHoursAvailability: string;
         };
-      }
+      },
+      context: any
     ): Promise<IDoctor> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
-        const doctorId = new ObjectId(_id);
+        const doctorId = new ObjectId(args._id);
         const filter = { _id: doctorId };
-        const update = {
-          $set: {
-            doctorName,
-            doctorSpecialty,
-            doctorOfficeAddress,
-            doctorCity,
-            doctorState,
-            doctorCountry,
-            doctorPhone,
-            doctorHoursAvailability
-          }
-        };
+        const update = { $set: { ...args.doctors } };
         const options = { returnOriginal: false };
         const updatedDoctor: IDoctor | null = await Doctor.findOneAndUpdate(
           filter,
@@ -122,19 +120,22 @@ const doctorResolver = {
           options
         );
         if (!updatedDoctor) {
-          throw new Error('Appointment not found');
+          throw new Error('Doctor not found');
         }
         return updatedDoctor;
       } catch (err) {
         throw err;
       }
     },
-    deleteDoctor: async (_: any, { _id }: { _id: string }): Promise<string> => {
+    deleteDoctor: async (_: any, { _id }: { _id: string }, context: any): Promise<string> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
         const doctorId = new ObjectId(_id);
         const deleledDoctor: IDoctor | null = await Doctor.findByIdAndDelete({ _id: doctorId });
         if (!deleledDoctor) {
-          throw new Error('Product not found!');
+          throw new Error('Doctor not found');
         }
         return `Doctor ${deleledDoctor.doctorName} deleted successfully`;
       } catch (err) {

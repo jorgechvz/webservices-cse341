@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, ObjectId } from 'mongoose';
 
-enum AppointmentStatus {
+export enum AppointmentStatus {
   Pending = 'pending',
   Confirmed = 'confirmed',
   Canceled = 'canceled'

@@ -10,7 +10,7 @@ import { apolloInit } from './src/config/apollo.config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-const app: Express = express();
+export const app: Express = express();
 const port: number = parseInt(process.env.PORT as string, 10) || 8080;
 
 interface UserSession {
@@ -37,11 +37,12 @@ void apolloInit(app);
 
 app
   .use(bodyParser.json())
-  .use(cors({
-    origin: ['*', 'https://studio.apollographql.com'],
-    credentials: true,
-  }))
-  .options('*', cors())
+  .use(
+    cors({
+      origin: ['https://studio.apollographql.com','https://medical-appointments-api.onrender.com'],
+      credentials: true
+    })
+  )
   .use(cookieParser())
   .use(
     session({
@@ -59,13 +60,12 @@ app
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.cookie("token",req.cookies.token)
     next();
   })
   .use(passport.initialize())
   .use(passport.session())
   .use('/main', (req, res) => {
-    res.send('Welcome');
+    res.json({ message: 'Welcome' });
   })
   .use(
     '/',

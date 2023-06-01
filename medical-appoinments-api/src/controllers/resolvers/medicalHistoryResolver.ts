@@ -1,22 +1,43 @@
 import MedicalHistory, { IMedicalHistory } from '../../models/medicalHistoryModel';
 import { ObjectId } from 'mongodb';
+import {
+  medicalHistoryCreateValidationSchema,
+  medicalHistoryUpdateValidationSchema
+} from '../../utils/medicalHistoryValidation';
+import { AuthenticationError } from 'apollo-server';
 
 const medicalHistoryResolver = {
   Query: {
-    getAllMedicalHistory: async (): Promise<IMedicalHistory[]> => {
+    getAllMedicalHistory: async (__: any, _: any, context: any): Promise<IMedicalHistory[]> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
         const medicalHistory: IMedicalHistory[] = await MedicalHistory.find();
+        if (!medicalHistory) {
+          throw new Error('Medical History not found!');
+        }
         return medicalHistory;
       } catch (err) {
         throw err;
       }
     },
-    getMedicalHistoryById: async (_: any, { _id }: { _id: string }): Promise<IMedicalHistory[]> => {
+    getMedicalHistoryById: async (
+      _: any,
+      { _id }: { _id: string },
+      context: any
+    ): Promise<IMedicalHistory[]> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
         const medicalHistoryId = new ObjectId(_id);
         const getMedicalHistory: IMedicalHistory[] | null = await MedicalHistory.find({
           _id: medicalHistoryId
         });
+        if (getMedicalHistory.length === 0) {
+          throw new Error('Medical History not found!');
+        }
         return getMedicalHistory;
       } catch (err) {
         throw err;
@@ -41,7 +62,16 @@ const medicalHistoryResolver = {
       context: any,
       info: any
     ): Promise<IMedicalHistory> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
+        const medicalHistoryValidate = medicalHistoryCreateValidationSchema.validate({
+          ...args.medicalHistory
+        });
+        if (medicalHistoryValidate.error) {
+          throw new Error(medicalHistoryValidate.error.details[0].message);
+        }
         const newMedicalHistory: IMedicalHistory = new MedicalHistory({ ...args.medicalHistory });
         await newMedicalHistory.save();
         return newMedicalHistory;
@@ -50,20 +80,8 @@ const medicalHistoryResolver = {
       }
     },
     updateMedicalHistory: async (
-      _: any,
-      {
-        _id,
-        medicalHistory: {
-          patientId,
-          doctorId,
-          visitDate,
-          diagnosis,
-          treatment,
-          medications,
-          testResults,
-          comments
-        }
-      }: {
+      parent: any,
+      args: {
         _id: string;
         medicalHistory: {
           patientId: ObjectId;
@@ -75,22 +93,23 @@ const medicalHistoryResolver = {
           testResults: string;
           comments: string;
         };
-      }
+      },
+      context: any
     ): Promise<IMedicalHistory> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
-        const medicalHistoryId = new ObjectId(_id);
+        const medicalHistoryValidate = medicalHistoryUpdateValidationSchema.validate({
+          ...args.medicalHistory
+        });
+        if (medicalHistoryValidate.error) {
+          throw new Error(medicalHistoryValidate.error.details[0].message);
+        }
+        const medicalHistoryId = new ObjectId(args._id);
         const filter = { _id: medicalHistoryId };
         const update = {
-          $set: {
-            patientId,
-            doctorId,
-            visitDate,
-            diagnosis,
-            treatment,
-            medications,
-            testResults,
-            comments
-          }
+          $set: { ...args.medicalHistory }
         };
         const options = { returnOriginal: false };
         const updatedMedicalHistory: IMedicalHistory | null = await MedicalHistory.findOneAndUpdate(
@@ -99,20 +118,27 @@ const medicalHistoryResolver = {
           options
         );
         if (!updatedMedicalHistory) {
-          throw new Error('Appointment not found');
+          throw new Error('Medical History not found');
         }
         return updatedMedicalHistory;
       } catch (err) {
         throw err;
       }
     },
-    deleteMedicalHistory: async (_: any, { _id }: { _id: string }): Promise<string> => {
+    deleteMedicalHistory: async (
+      _: any,
+      { _id }: { _id: string },
+      context: any
+    ): Promise<string> => {
+      if (!context.isAuthenticated) {
+        throw new AuthenticationError('To be able to access this data. You need to authenticate.');
+      }
       try {
         const medicalHistoryId = new ObjectId(_id);
         const deletedMedicalHistory: IMedicalHistory | null =
           await MedicalHistory.findByIdAndDelete({ _id: medicalHistoryId });
         if (!deletedMedicalHistory) {
-          throw new Error('Product not found!');
+          throw new Error('Medical History not found!');
         }
         return `Medical history deleted successfully`;
       } catch (err) {

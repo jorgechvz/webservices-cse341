@@ -14,18 +14,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-export interface MyContext {
-  user: string;
-  isAuthenticate: boolean;
-}
-
 export const apolloInit = async (app: Express) => {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req, res }) => {
-      const token = req.cookies.token;
-      console.log(token);
+      const token = req.cookies.token || req.headers.authorization;
       let user;
       let isAuthenticated = false;
       try {
@@ -46,7 +40,7 @@ export const apolloInit = async (app: Express) => {
       app,
       path: '/graphql',
       cors: {
-        origin: ['https://medical-appointments-api.onrender.com', 'https://studio.apollographql.com'],
+        origin: ['https://studio.apollographql.com','https://medical-appointments-api.onrender.com'],
         credentials: true
       }
     });

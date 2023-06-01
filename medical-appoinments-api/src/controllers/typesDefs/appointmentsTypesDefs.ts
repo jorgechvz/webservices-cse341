@@ -28,7 +28,7 @@ const appointmentsTypesDefs = gql`
   }
 
   input CreateAppointmentInput {
-    patientId: ID!
+    patientId: ID! 
     doctorId: ID!
     appointmentDate: String!
     appointmentTime: String!
