@@ -38,7 +38,7 @@ oauthRouter.get('/logout', (req: Request, res: Response, next) => {
 oauthRouter.get('/', (req: Request, res: Response) => {
   res.send(
     req.session.user !== undefined
-      ? `Welcome to my API Logged in as ${req.session.user.displayName}\n\nIf you can't access the API data on the Apollo server after logging in, you need to configure the headers. Go to the headers tab and add the following (you will need to copy the generated token):\n\nkey: "Authorization"\nvalue:${req.cookies.token}`
+      ? `Welcome to my API Logged in as ${req.session.user.displayName}\n\nIf you can't access the API data on the Apollo server after logging in, you need to configure the headers. Go to the headers tab and add the following (you will need to copy the generated token):\n\nkey: "Authorization"\nvalue: ${req.cookies.token}`
       : `Logged Out `
   );
 });
